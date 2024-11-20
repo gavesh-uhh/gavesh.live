@@ -5,8 +5,12 @@
 <div class="flex-1 flex flex-col gap-10">
 	<div>
 		<h1 class="font-semibold text-muted-foreground">About Me</h1>
-		<p>18-year-old student with an avid love for Tech, Software, Aeronautics and Minimalism.</p>
+		<p>
+			18-year-old student from <span class="text-blue-600">Colombo, Sri Lanka</span> with an avid love
+			for Tech, Software, Aeronautics and Minimalism.
+		</p>
 	</div>
+
 	<div>
 		<h1 class="font-semibold text-muted-foreground">Skillset Overview</h1>
 		<p>- Generalist, Fullstack</p>

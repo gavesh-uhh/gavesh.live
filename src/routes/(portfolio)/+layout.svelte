@@ -12,7 +12,7 @@
 	<title>Gavesh Saparamadu</title>
 </svelte:head>
 
-<div class="py-10 px-8 sm:py-16 sm:px-14 flex flex-col min-h-screen gap-6">
+<div class="py-10 px-8 sm:py-20 sm:px-16 flex flex-col min-h-screen gap-6">
 	<Canvas />
 	<div class="z-20 flex flex-col gap-6">
 		<Header />

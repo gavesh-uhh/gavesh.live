@@ -3,8 +3,7 @@
 </script>
 
 <div
-	class="absolute select-none z-10 pointer-events-none overflow-hidden left-0 top-0 w-full h-screen debug"
+	class="absolute select-none z-10 pointer-events-none overflow-hidden left-0 top-0 w-full h-screen"
 >
-	<img src={Contour} class="blur-lg contour w-full h-full opacity-55" alt="" />
+	<img src={Contour} class="blur-lg contour w-full h-full opacity-35" alt="" />
 </div>
-

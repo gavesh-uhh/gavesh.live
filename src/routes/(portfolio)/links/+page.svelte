@@ -13,7 +13,11 @@
 	{#snippet link(link: Link)}
 		<div class="flex flex-col gap-0">
 			<div class="flex items-center gap-2">
-				<a href={link.href} class="hover:underline underline-offset-2">{link.title}</a>
+				<a
+					data-sveltekit-preload-data="hover"
+					href={link.href}
+					class="hover:underline underline-offset-2">{link.title}</a
+				>
 				<SquareArrowOutUpRight class="w-4 h-4" />
 			</div>
 			{#if link.description}
