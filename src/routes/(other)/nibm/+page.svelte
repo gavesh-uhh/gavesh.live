@@ -150,13 +150,13 @@
 	}
 
 	.offset {
-		@apply px-4 py-2 rounded-3xl text-sm sm:text-base;
+		@apply px-4 py-2 rounded-3xl text-xs sm:text-base;
 		@apply bg-muted;
 		transition: all 150ms ease-out;
 	}
 
 	.tag {
-		@apply px-4 py-2 rounded-3xl text-sm sm:text-base;
+		@apply px-4 py-2 rounded-3xl text-xs sm:text-base;
 		@apply bg-muted;
 		transition: all 150ms ease-out;
 	}
