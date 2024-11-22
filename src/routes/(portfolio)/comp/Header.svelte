@@ -12,6 +12,7 @@
 	let SPOTIFY_ALBUM: string;
 	let SPOTIFY_IMAGE: string;
 	let isOnline: boolean = false;
+	let paused: boolean = false;
 
 	onMount(async () => {
 		await updateProfilePicture();
@@ -32,6 +33,7 @@
 	}
 
 	async function updateSpotify() {
+		if (paused) return;
 		try {
 			const response = await fetch('/api/lastfm');
 			if (!response.ok) {
@@ -64,8 +66,8 @@
 	}
 </script>
 
-<div class="flex flex-col sm:flex-row gap-6 sm:gap-12">
-	<div class="flex flex-row gap-6 items-center">
+<div class="flex flex-col sm:flex-row gap-6 sm:gap-14">
+	<div class="flex flex-row gap-6 items-end">
 		<div>
 			<img class="max-w-[100px] max-h-[100px] rounded-lg" src={GITHUB_PROFILE_URL} alt="" />
 		</div>
@@ -80,7 +82,7 @@
 		<img
 			loading="lazy"
 			title={SPOTIFY_ALBUM}
-			class="size-[50px] rounded-md"
+			class="size-[45px] rounded-md"
 			src={isOnline ? SPOTIFY_IMAGE : DefaultSong}
 			alt={isOnline ? SPOTIFY_ALBUM : 'Album Cover for Default Picture'}
 		/>
@@ -88,7 +90,7 @@
 			<div>
 				{#if isOnline}
 					<h1 class="font-semibold text-sm sm:text-md flex flex-row gap-1">
-						<div>
+						<div class="text-xs">
 							<span class="text-xs text-muted-foreground">Listening to </span>
 							{SPOTIFY_TRACK}
 						</div>
@@ -100,7 +102,7 @@
 					</h1>
 					<h1 class="text-xs text-muted-foreground">by {SPOTIFY_ARTIST}</h1>
 				{:else}
-					<h1 class="font-semibold text-sm">Not Listening</h1>
+					<h1 class="font-semibold text-xs">Not Listening</h1>
 					<h1 class="text-xs text-muted-foreground">to anything</h1>
 				{/if}
 			</div>

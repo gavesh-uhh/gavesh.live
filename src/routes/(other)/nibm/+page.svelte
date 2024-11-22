@@ -3,13 +3,22 @@
 	import { onMount } from 'svelte';
 	import LectureTab from './comps/LectureTab.svelte';
 	let lectures: Lecture[] = $state([]);
-	let currentDate: Date;
-
+	let currentDate: Date | undefined = $state();
+	let currentBranch: string = $state('SOC');
 	let loaded = $state(false);
 	let searchTerm = $state('');
 	let offset = $state(0);
 
+	const toggleBranch = () => {
+		const branches = ['SOC', 'NIC', 'SOB', 'all'];
+		const currentIndex = branches.indexOf(currentBranch);
+		const nextIndex = (currentIndex + 1) % branches.length;
+		currentBranch = branches[nextIndex];
+	};
+
 	onMount(async () => {
+		const urlParams = new URLSearchParams(window.location.search);
+		currentBranch = urlParams.get('branch') ?? 'SOC';
 		currentDate = new Date();
 		const response = await fetch('/api/nibm?limit=5&date=' + currentDate);
 		const json = await response.json();
@@ -21,6 +30,7 @@
 	});
 
 	const getDay = (offset: number): string => {
+		if (currentDate == undefined) return 'Noday';
 		const newDate = new Date(currentDate);
 		newDate.setDate(newDate.getDate() + offset);
 		return newDate.toLocaleDateString('en-US', { weekday: 'long' });
@@ -40,6 +50,25 @@
 		];
 		return quotes[Math.floor(Math.random() * quotes.length)];
 	};
+
+	const validateSearchQuery = (lecture: Lecture): boolean => {
+		if (
+			lecture.class?.toLowerCase().startsWith(searchTerm.toLowerCase()) ||
+			lecture.lecturer?.toLowerCase().startsWith(searchTerm.toLowerCase()) ||
+			lecture.batch?.toLowerCase().startsWith(searchTerm.toLowerCase()) ||
+			lecture.branch?.toLowerCase().startsWith(searchTerm.toLowerCase())
+		) {
+			return true;
+		}
+		return false;
+	};
+
+	const getBranchColorClass = () => {
+		if (currentBranch === 'SOC') return 'bg-blue-500';
+		if (currentBranch === 'SOB') return 'bg-green-500';
+		if (currentBranch === 'NIC') return 'bg-yellow-500';
+		return 'bg-muted';
+	};
 </script>
 
 <svelte:head>
@@ -58,7 +87,20 @@
 		<h1 class="text-3xl font-bold">NIBM Explorer</h1>
 		<p class="text-muted-foreground">Easily sort through pages of lectures.</p>
 	</div>
-	<div class="mt-2 flex-1 flex flex-row gap-2">
+	<div>
+		<button class="branch-select {getBranchColorClass()}" onclick={toggleBranch}>
+			Current Branch : {currentBranch.toUpperCase()}
+		</button>
+	</div>
+	<div class="flex-1 flex flex-wrap gap-2">
+		<button
+			class="tag"
+			onclick={() => {
+				searchTerm = 'EXAM';
+			}}
+			aria-current={searchTerm === 'EXAM' ? 'true' : null}>Exams</button
+		>
+
 		<button
 			class="tag"
 			onclick={() => {
@@ -74,7 +116,6 @@
 			aria-current={searchTerm === 'REPEATERS' ? 'true' : null}>Repeating Exams</button
 		>
 	</div>
-
 	<div class="flex flex-row gap-2 items-center">
 		<input
 			class="bg-muted rounded-lg w-full h-10 px-4"
@@ -119,21 +160,33 @@
 	{/if}
 	<div class="flex flex-col gap-2">
 		{#if loaded}
+			{#if lectures.filter((lecture) => validateSearchQuery(lecture) && lecture.offset === offset).length === 0}
+				<div class="flex-1 my-10 h-full justify-center gap-4 items-center flex flex-col">
+					<h1 class="text-sm text-muted-foreground">No lectures found for "{searchTerm}".</h1>
+					<img
+						class="max-w-[200px] rounded-lg"
+						src="https://media.tenor.com/ogsH7Ailje8AAAAM/cat-funny-cat.gif"
+						alt=""
+					/>
+				</div>
+			{/if}
 			{#each lectures as lecture}
-				{#if lecture.branch?.startsWith(searchTerm)}
-					{#if lecture.offset === offset}
-						<LectureTab {lecture} />
-					{/if}
-				{:else if searchTerm === ''}
-					{#if lecture.offset === offset}
-						<LectureTab {lecture} />
+				{#if lecture.branch === currentBranch || currentBranch === 'all'}
+					{#if validateSearchQuery(lecture)}
+						{#if lecture.offset === offset}
+							<LectureTab {lecture} />
+						{/if}
+					{:else if searchTerm === ''}
+						{#if lecture.offset === offset}
+							<LectureTab {lecture} />
+						{/if}
 					{/if}
 				{/if}
 			{/each}
 		{:else}
-			<div class="mt-10 flex-1 h-full justify-center gap-2 items-center flex">
-				<h1>Loading ({getRandomQuote()})</h1>
+			<div class="mt-10 flex-1 h-full justify-center gap-4 items-center flex flex-col">
 				<Loader2 class="animate-spin" />
+				<h1 class="text-xs text-muted-foreground">{getRandomQuote()}</h1>
 			</div>
 		{/if}
 	</div>
@@ -145,6 +198,11 @@
 </div>
 
 <style>
+	.branch-select {
+		@apply px-4 py-2 rounded-xl text-xs sm:text-base;
+		transition: all 150ms ease-out;
+	}
+
 	.offset[aria-current='true'] {
 		@apply bg-blue-900;
 	}
@@ -165,3 +223,4 @@
 		@apply bg-yellow-500 text-black;
 	}
 </style>
+

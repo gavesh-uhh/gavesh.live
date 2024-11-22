@@ -4,6 +4,7 @@ declare global {
 
   type Lecture = {
     class: string | null;
+    batch: string | null;
     branch: string | null;
     floor: string | null;
     lecturer: string | null;

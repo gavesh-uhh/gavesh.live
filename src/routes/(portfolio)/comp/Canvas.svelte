@@ -5,5 +5,5 @@
 <div
 	class="absolute select-none z-10 pointer-events-none overflow-hidden left-0 top-0 w-full h-screen"
 >
-	<img src={Contour} class="blur-lg contour w-full h-full opacity-35" alt="" />
+	<img src={Contour} class=" contour w-full h-full opacity-[2.5%] grayscale" alt="" />
 </div>

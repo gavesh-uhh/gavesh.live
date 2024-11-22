@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { Home, BookOpen, Link, Sparkles } from 'lucide-svelte';
+	import { Home, BookOpen, Link, SquareGanttChart } from 'lucide-svelte';
 	const currRoute = $derived($page.url.pathname);
 </script>
 
@@ -13,6 +13,11 @@
 		<BookOpen class="w-4 h-4" />
 		Skills</a
 	>
+	<a href="/projects" aria-current={currRoute === '/projects' ? 'page' : null}>
+		<SquareGanttChart class="w-4 h-4" />
+		Projects</a
+	>
+
 	<a href="/links" aria-current={currRoute === '/links' ? 'page' : null}>
 		<Link class="w-4 h-4" />
 		Links</a

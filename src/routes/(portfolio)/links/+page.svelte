@@ -15,6 +15,7 @@
 			<div class="flex items-center gap-2">
 				<a
 					data-sveltekit-preload-data="hover"
+					data-sveltekit-preload-code="hover"
 					href={link.href}
 					class="hover:underline underline-offset-2">{link.title}</a
 				>
