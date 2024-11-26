@@ -36,7 +36,7 @@
 				'Easier way of viewing lectures. Easily sort through and view where lectures are happening.'
 		})}
 		{@render link({
-			href: '/links',
+			href: '/music',
 			title: 'Music History',
 			description: 'View my music history and popular tracks.'
 		})}

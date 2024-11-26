@@ -17,6 +17,13 @@
 		<p>- Java, C#, C++</p>
 		<p>- Svelte, React, Tailwind</p>
 	</div>
+
+	<div>
+		<h1 class="font-semibold text-muted-foreground">Interests</h1>
+		<p>- Embedded Tech</p>
+		<p>- AI/ML</p>
+	</div>
+
 	<div>
 		<h1 class="font-semibold text-muted-foreground">Contact</h1>
 		<div class="flex flex-col">

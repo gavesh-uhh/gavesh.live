@@ -19,6 +19,7 @@
 	onMount(async () => {
 		const urlParams = new URLSearchParams(window.location.search);
 		currentBranch = urlParams.get('branch') ?? 'SOC';
+		searchTerm = urlParams.get('q') ?? '';
 		currentDate = new Date();
 		const response = await fetch('/api/nibm?limit=5&date=' + currentDate);
 		const json = await response.json();
@@ -30,7 +31,7 @@
 	});
 
 	const getDay = (offset: number): string => {
-		if (currentDate == undefined) return 'Noday';
+		if (currentDate == undefined) return 'Weirday';
 		const newDate = new Date(currentDate);
 		newDate.setDate(newDate.getDate() + offset);
 		return newDate.toLocaleDateString('en-US', { weekday: 'long' });
@@ -87,11 +88,6 @@
 		<h1 class="text-3xl font-bold">NIBM Explorer</h1>
 		<p class="text-muted-foreground">Easily sort through pages of lectures.</p>
 	</div>
-	<div>
-		<button class="branch-select {getBranchColorClass()}" onclick={toggleBranch}>
-			Current Branch : {currentBranch.toUpperCase()}
-		</button>
-	</div>
 	<div class="flex-1 flex flex-wrap gap-2">
 		<button
 			class="tag"
@@ -116,9 +112,16 @@
 			aria-current={searchTerm === 'REPEATERS' ? 'true' : null}>Repeating Exams</button
 		>
 	</div>
-	<div class="flex flex-row gap-2 items-center">
+
+	<div class="flex-shrink-0">
+		<button class="px-2 branch-select {getBranchColorClass()}" onclick={toggleBranch}>
+			Branch : {currentBranch.toUpperCase()}
+		</button>
+	</div>
+
+	<div class="flex flex-row gap-2 items-center flex-nowrap">
 		<input
-			class="bg-muted rounded-lg w-full h-10 px-4"
+			class="bg-muted rounded-lg flex-grow h-10 px-4 text-sm"
 			bind:value={searchTerm}
 			type="text"
 			placeholder="Search (Example - DSE24.2F)"
@@ -127,11 +130,12 @@
 			onclick={() => {
 				searchTerm = '';
 			}}
-			class="p-2 rounded-lg bg-destructive flex items-center justify-center h-10 w-10"
+			class="p-2 rounded-lg bg-destructive flex-shrink-0 flex items-center justify-center h-10 w-10"
 		>
 			<Trash class="w-4 h-4 opacity-50 text-white" />
 		</button>
 	</div>
+
 	{#if loaded}
 		<div class="flex flex-row items-center justify-center gap-2">
 			<button
@@ -163,11 +167,15 @@
 			{#if lectures.filter((lecture) => validateSearchQuery(lecture) && lecture.offset === offset).length === 0}
 				<div class="flex-1 my-10 h-full justify-center gap-4 items-center flex flex-col">
 					<h1 class="text-sm text-muted-foreground">No lectures found for "{searchTerm}".</h1>
-					<img
-						class="max-w-[200px] rounded-lg"
-						src="https://media.tenor.com/ogsH7Ailje8AAAAM/cat-funny-cat.gif"
-						alt=""
-					/>
+					{#if searchTerm !== ''}
+						<img
+							class="max-w-[200px] rounded-lg"
+							src="https://media.tenor.com/ogsH7Ailje8AAAAM/cat-funny-cat.gif"
+							alt=""
+						/>
+					{:else}
+						Server is down :(
+					{/if}
 				</div>
 			{/if}
 			{#each lectures as lecture}
@@ -223,4 +231,3 @@
 		@apply bg-yellow-500 text-black;
 	}
 </style>
-

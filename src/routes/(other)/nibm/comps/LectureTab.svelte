@@ -67,7 +67,7 @@
 		height: 100%;
 		@apply rounded-lg;
 		background: rgb(162, 29, 29);
-		background: linear-gradient(0deg, rgba(162, 29, 29, 0.25) 10%, rgba(0, 0, 0, 0) 100%);
+		background: linear-gradient(0deg, rgba(162, 29, 29, 0.5) -50%, rgba(0, 0, 0, 0) 80%);
 	}
 
 	.exam-cat {
@@ -78,7 +78,7 @@
 		width: 20%;
 		min-width: 100px;
 		@apply rounded-r-lg;
-		opacity: 0.5;
+		opacity: 0.4;
 		object-fit: cover;
 		mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
 		-webkit-mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);

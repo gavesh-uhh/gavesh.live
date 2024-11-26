@@ -3,7 +3,7 @@
 </script>
 
 <div
-	class="absolute select-none z-10 pointer-events-none overflow-hidden left-0 top-0 w-full h-screen"
+	class="object-contain fixed select-none z-10 pointer-events-none overflow-hidden left-0 top-0 w-full h-screen"
 >
-	<img src={Contour} class=" contour w-full h-full opacity-[2.5%] grayscale" alt="" />
+	<img src={Contour} class=" contour w-full h-full opacity-[2.5%] grayscale object-cover" alt="" />
 </div>

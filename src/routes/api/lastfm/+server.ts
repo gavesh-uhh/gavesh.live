@@ -32,6 +32,7 @@ export const GET = async () => {
       {
         online: isOnline,
         recent: most_recent,
+        tracks: tracks.recenttracks.track
       },
       {
         headers: {
