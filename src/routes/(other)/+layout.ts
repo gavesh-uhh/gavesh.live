@@ -3,9 +3,3 @@ import { injectAnalytics } from '@vercel/analytics/sveltekit';
 
 injectAnalytics({ mode: dev ? 'development' : 'production' });
 
-export const load = ({ url }: any) => {
-  const { pathname } = url;
-  return {
-    pathname
-  };
-};
