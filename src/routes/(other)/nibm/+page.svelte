@@ -166,13 +166,22 @@
 		{#if loaded}
 			{#if lectures.filter((lecture) => validateSearchQuery(lecture) && lecture.offset === offset).length === 0}
 				<div class="flex-1 my-10 h-full justify-center gap-4 items-center flex flex-col">
-					<h1 class="text-sm text-muted-foreground">No lectures found for "{searchTerm}".</h1>
 					{#if searchTerm !== ''}
-						<img
-							class="max-w-[200px] rounded-lg"
-							src="https://media.tenor.com/ogsH7Ailje8AAAAM/cat-funny-cat.gif"
-							alt=""
-						/>
+						{#if searchTerm === '3wheel' || searchTerm === 'threewheel'}
+							<img
+								class="max-w-[200px] rounded-lg"
+								src="https://utfs.io/f/TIFafgpE6s0cjQTCkW5AtlqTDP2LFM9ihae3cYfmysz06bxO"
+								alt=""
+							/>
+							<h1>Certified Orugodawatta Moment</h1>
+						{:else}
+							<h1 class="text-sm text-muted-foreground">No lectures found for "{searchTerm}".</h1>
+							<img
+								class="max-w-[200px] rounded-lg"
+								src="https://media.tenor.com/ogsh7ailje8aaaam/cat-funny-cat.gif"
+								alt=""
+							/>
+						{/if}
 					{:else}
 						Server is down :(
 					{/if}
