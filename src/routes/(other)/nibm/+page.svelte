@@ -85,10 +85,16 @@
 
 <div class="h-full flex-1 flex gap-4 flex-col">
 	<div>
-		<h1 class="text-3xl font-bold">NIBM Explorer</h1>
+		<h1 class="text-3xl font-bold"><span class="italic text-blue-500 mr-2">NIBM</span> Lectures</h1>
 		<p class="text-muted-foreground">Easily sort through pages of lectures.</p>
 	</div>
 	<div class="flex-1 flex flex-wrap gap-2">
+		<div class="flex-shrink-0">
+			<button class="px-2 branch-select {getBranchColorClass()}" onclick={toggleBranch}>
+				Branch : {currentBranch.toUpperCase()}
+			</button>
+		</div>
+
 		<button
 			class="tag"
 			onclick={() => {
@@ -111,12 +117,6 @@
 			}}
 			aria-current={searchTerm === 'REPEATERS' ? 'true' : null}>Repeating Exams</button
 		>
-	</div>
-
-	<div class="flex-shrink-0">
-		<button class="px-2 branch-select {getBranchColorClass()}" onclick={toggleBranch}>
-			Branch : {currentBranch.toUpperCase()}
-		</button>
 	</div>
 
 	<div class="flex flex-row gap-2 items-center flex-nowrap">
@@ -216,7 +216,7 @@
 
 <style>
 	.branch-select {
-		@apply px-4 py-2 rounded-xl text-xs sm:text-base;
+		@apply px-6 py-3 rounded-xl text-xs sm:text-base;
 		transition: all 150ms ease-out;
 	}
 
@@ -231,7 +231,7 @@
 	}
 
 	.tag {
-		@apply px-4 py-2 rounded-3xl text-xs sm:text-base;
+		@apply px-6 py-3 rounded-3xl text-xs sm:text-base;
 		@apply bg-muted;
 		transition: all 150ms ease-out;
 	}
