@@ -38,7 +38,15 @@ let history: any[] = [
 export const GET = async ({ url }: { url: URL }) => {
   const query = url.searchParams.get("q");
   if (!query) return error(400, "Query not provided");
-  if (requestCount >= 10) return error(403, "Rate limited!");
+  if (requestCount >= 10) {
+    return json({
+      original: "",
+      response: {
+        content: "Sorry! You are being rate limited.",
+        emoji: "❌"
+      }
+    })
+  }
   try {
     return json({
       original: query,
