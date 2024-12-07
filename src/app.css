@@ -30,11 +30,21 @@
   src: url("./lib/fonts/Inter.ttf");
 }
 
+@font-face {
+  font-family: Hedvig;
+  src: url("./lib/fonts/Hedvig.ttf");
+}
+
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: 'Inter', sans-serif;
+}
+
+.font-fancy {
+  font-family: "Hedvig", serif !important;
 }
 
 .debug {

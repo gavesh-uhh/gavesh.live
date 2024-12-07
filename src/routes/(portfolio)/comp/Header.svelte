@@ -66,15 +66,15 @@
 	}
 </script>
 
-<div class="flex flex-col sm:flex-row gap-6 sm:gap-14">
-	<div class="flex flex-row gap-6 items-end">
+<div class="flex flex-col sm:flex-row gap-10 sm:gap-14">
+	<div class="flex flex-row gap-4 items-end">
 		<div>
-			<img class="max-w-[100px] max-h-[100px] rounded-lg" src={GITHUB_PROFILE_URL} alt="" />
+			<img class="max-w-[120px] max-h-[120px] rounded-lg" src={GITHUB_PROFILE_URL} alt="" />
 		</div>
 		<div class="cursor-pointer h-full flex flex-col justify-end">
 			<div>
-				<h1 class=" text-3xl">Gavesh</h1>
-				<h1 class="text-muted-foreground text-2xl">Saparamadu</h1>
+				<h1 class="font-hedvig text-3xl">Gavesh</h1>
+				<h1 class="text-muted-foreground text-3xl">Saparamadu</h1>
 			</div>
 		</div>
 	</div>

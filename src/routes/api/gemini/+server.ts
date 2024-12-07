@@ -165,7 +165,6 @@ const getConnection = async () => {
       "value": "Cannot retreive connection results."
     }
     return result
-
   }
 }
 

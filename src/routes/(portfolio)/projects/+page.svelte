@@ -1,8 +1,8 @@
 <!---  just a prototype neeeds add more dyanmic-ish-ness type shit. and links to the projects -->
 <div class="flex-1 flex flex-col gap-4">
 	<h1 class="font-semibold text-muted-foreground">Projects</h1>
-	<div class="flex flex-col gap-2">
-		<div class="border-l-2 border-accent pl-4 py-4 rounded-lg">
+	<div class="flex flex-col gap-4">
+		<div class="border-l-2 border-white/50 pl-5 py-4">
 			<h1 class="text-lg sm:text-2xl mb-1">Welp</h1>
 			<p class="text-xs sm:text-base text-muted-foreground max-w-[400px]">
 				A simple CLI agent powered by Gemini 1.5 to help streamline your tasks and make your
@@ -23,4 +23,3 @@
 		</div>
 	</div>
 </div>
-

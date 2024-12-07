@@ -4,7 +4,7 @@
 	const currRoute = $derived($page.url.pathname);
 </script>
 
-<div class="flex flex-wrap gap-2 md:bg-primary-foreground/50 p-1 w-fit rounded-3xl">
+<div class=" flex flex-wrap gap-2 md:bg-primary-foreground/50 p-1 w-fit rounded-3xl">
 	<a href="/" aria-current={currRoute === '/' ? 'page' : null}>
 		<Home class="w-4 h-4" />
 		Home</a
@@ -31,14 +31,14 @@
 		display: flex;
 		align-items: center;
 		gap: 1rem;
-		@apply px-4 py-2 rounded-3xl;
+		@apply px-6 py-2 rounded-3xl;
 		transition: all 150ms linear;
 	}
 
 	a[aria-current='page'] {
 		@apply bg-accent;
 		@apply font-semibold;
-		@apply px-8;
+		@apply px-10;
 	}
 
 	a:hover {
