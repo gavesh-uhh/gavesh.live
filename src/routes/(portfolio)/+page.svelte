@@ -27,8 +27,9 @@
 	<div>
 		<h1 class="font-semibold text-muted-foreground">About Me</h1>
 		<p>
-			18-year-old student from <span class="text-blue-500">Colombo, Sri Lanka</span> with an avid love
-			for Tech, Software, Aeronautics and Minimalism.
+			{new Date().getFullYear() - 2006}-year-old student from
+			<span class="text-green-400">Colombo, Sri Lanka</span> with an avid love for Tech, Software, Aeronautics
+			and Minimalism.
 		</p>
 	</div>
 
@@ -41,6 +42,7 @@
 
 	<div>
 		<h1 class="font-semibold text-muted-foreground">Interests</h1>
+		<p>- Cosmology, Astronomy</p>
 		<p>- Embedded Tech</p>
 		<p>- AI/ML</p>
 	</div>
