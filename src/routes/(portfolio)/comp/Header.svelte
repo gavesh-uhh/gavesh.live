@@ -82,7 +82,7 @@
 		<img
 			loading="lazy"
 			title={SPOTIFY_ALBUM}
-			class="size-[45px] rounded-md"
+			class="size-[50px] rounded-md"
 			src={isOnline ? SPOTIFY_IMAGE : DefaultSong}
 			alt={isOnline ? SPOTIFY_ALBUM : 'Album Cover for Default Picture'}
 		/>

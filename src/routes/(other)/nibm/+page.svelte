@@ -39,15 +39,12 @@
 
 	const getRandomQuote = () => {
 		const quotes = [
-			'This loading screen is brought to you by bad optimization.',
-			'Still faster than your internet connection.',
-			'Fun fact: Loading screens load nothing.',
-			'Patience is a feature, not a bug.',
-			'Yes, this is necessary. Trust us.',
-			'The progress bar isn’t stuck—it’s meditating.',
-			'This loading bar is purely decorative.',
+			'Why hurry? Your lecturer will start 10 minutes late anyway.',
+			'Fun fact: This page is as reliable as the Wi-Fi in the lecture halls.',
 			'Almost there... or maybe not.',
-			'Time flies when you’re not staring at a loading screen.'
+			'If this takes too long, blame the admin department.',
+			'Loading... because skipping class isn’t an option. Or is it?',
+			'Still loading... unlike the uni elevators.'
 		];
 		return quotes[Math.floor(Math.random() * quotes.length)];
 	};
@@ -86,7 +83,9 @@
 <div class="h-full flex-1 flex gap-4 flex-col">
 	<div>
 		<h1 class="text-3xl font-bold"><span class="italic text-blue-500 mr-2">NIBM</span> Lectures</h1>
-		<p class="text-muted-foreground">Easily sort through pages of lectures.</p>
+		<p class="text-muted-foreground text-xs opacity-50">
+			Disclaimer: Optional and Tutorial classes are not recorded here, Blame the management.
+		</p>
 	</div>
 	<div class="flex-1 flex flex-wrap gap-2">
 		<div class="flex-shrink-0">
@@ -98,18 +97,19 @@
 		<button
 			class="tag"
 			onclick={() => {
-				searchTerm = 'EXAM';
+				searchTerm = 'DSE24.2F';
 			}}
-			aria-current={searchTerm === 'EXAM' ? 'true' : null}>Exams</button
+			aria-current={searchTerm === 'DSE24.2F' ? 'true' : null}>DSE24.2F</button
 		>
 
 		<button
 			class="tag"
 			onclick={() => {
-				searchTerm = 'DSE24.2F';
+				searchTerm = 'EXAM';
 			}}
-			aria-current={searchTerm === 'DSE24.2F' ? 'true' : null}>DSE24.2F</button
+			aria-current={searchTerm === 'EXAM' ? 'true' : null}>Exams</button
 		>
+
 		<button
 			class="tag"
 			onclick={() => {
@@ -137,29 +137,33 @@
 	</div>
 
 	{#if loaded}
-		<div class="flex flex-row items-center justify-center gap-2">
-			<button
-				class="offset"
-				aria-current={offset == 0 ? 'true' : null}
-				onclick={() => {
-					offset = 0;
-				}}>Today</button
+		<div class="fixed bottom-10 p-4 z-20 left-0 w-full flex items-center justify-center">
+			<div
+				class=" flex flex-row items-center justify-center gap-2 w-fit p-4 bg-black/80 rounded-lg"
 			>
-			<button
-				class="offset"
-				aria-current={offset == 1 ? 'true' : null}
-				onclick={() => {
-					offset = 1;
-				}}>Tomorrow</button
-			>
+				<button
+					class="offset"
+					aria-current={offset == 0 ? 'true' : null}
+					onclick={() => {
+						offset = 0;
+					}}>Today</button
+				>
+				<button
+					class="offset"
+					aria-current={offset == 1 ? 'true' : null}
+					onclick={() => {
+						offset = 1;
+					}}>Tomorrow</button
+				>
 
-			<button
-				class="offset"
-				aria-current={offset == 2 ? 'true' : null}
-				onclick={() => {
-					offset = 2;
-				}}>Next {getDay(2)}</button
-			>
+				<button
+					class="offset"
+					aria-current={offset == 2 ? 'true' : null}
+					onclick={() => {
+						offset = 2;
+					}}>Next {getDay(2)}</button
+				>
+			</div>
 		</div>
 	{/if}
 	<div class="flex flex-col gap-2">
@@ -216,7 +220,7 @@
 
 <style>
 	.branch-select {
-		@apply px-6 py-3 rounded-xl text-xs sm:text-base;
+		@apply px-5 py-2 rounded-xl text-xs sm:text-base;
 		transition: all 150ms ease-out;
 	}
 
@@ -231,7 +235,7 @@
 	}
 
 	.tag {
-		@apply px-6 py-3 rounded-3xl text-xs sm:text-base;
+		@apply px-4 py-2 rounded-3xl text-xs sm:text-base;
 		@apply bg-muted;
 		transition: all 150ms ease-out;
 	}

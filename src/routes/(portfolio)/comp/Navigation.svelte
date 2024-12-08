@@ -4,11 +4,10 @@
 	const currRoute = $derived($page.url.pathname);
 </script>
 
-<div class=" flex flex-wrap gap-2 md:bg-primary-foreground/50 p-1 w-fit rounded-3xl">
-	<a href="/" aria-current={currRoute === '/' ? 'page' : null}>
+<div class=" flex flex-wrap gap-2 pt-2 w-fit rounded-3xl">
+	<a href="/" class="icon" aria-current={currRoute === '/' ? 'page' : null}>
 		<Home class="w-4 h-4" />
-		Home</a
-	>
+	</a>
 	<a href="/skills" aria-current={currRoute === '/skills' ? 'page' : null}>
 		<BookOpen class="w-4 h-4" />
 		Skills</a
@@ -35,10 +34,18 @@
 		transition: all 150ms linear;
 	}
 
+	a.icon {
+		@apply px-3 py-2 rounded-3xl;
+	}
+
 	a[aria-current='page'] {
 		@apply bg-accent;
 		@apply font-semibold;
 		@apply px-10;
+	}
+
+	a.icon[aria-current='page'] {
+		@apply px-3;
 	}
 
 	a:hover {

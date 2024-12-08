@@ -32,9 +32,9 @@
 	});
 </script>
 
-<div>
+<div class="parent">
 	<div class="flex flex-col gap-4">
-		<h1>Recent Tracks</h1>
+		<h1>Recent Tracks (Scroll Horizontally)</h1>
 		<div
 			class="flex flex-col sm:flex-row gap-6 sm:gap-12 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200"
 		>
@@ -54,3 +54,16 @@
 		</div>
 	</div>
 </div>
+
+<style>
+	.parent {
+		scrollbar-width: none;
+	}
+	.parent {
+		-ms-overflow-style: none;
+	}
+	::-webkit-scrollbar,
+	::-webkit-scrollbar-button {
+		display: none;
+	}
+</style>

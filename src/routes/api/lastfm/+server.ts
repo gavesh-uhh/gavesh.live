@@ -54,9 +54,7 @@ const trimTrack = (fullStr: string) => {
 };
 
 const trimArtist = (fullStr: string) => {
-  const regex = /(?:feat\.?|ft\.?|&|with|x|vs)\s*[^,]+/gi;
-  const cleanedTitle = fullStr.replace(regex, "").trim();
-  return cleanedTitle.replace(/\s{2,}/g, " ");
+  return fullStr.replace(/\s{2,}/g, " ");
 };
 
 const getRecentTracks = async () => {

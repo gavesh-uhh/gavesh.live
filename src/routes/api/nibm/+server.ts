@@ -48,17 +48,15 @@ export const GET = async ({ url }: { url: URL }) => {
 
 async function getData(currentDate: string, baseUrl: string, limit: number) {
   const lectures: Lecture[] = [];
-  const requests: Promise<any>[] = [];
 
-  for (const branch of branches) {
-    for (let i = 0; i < limit; i++) {
+  const requests = branches.flatMap((branch) => {
+    return Array.from({ length: limit }, (_, i) => {
       const dateWithOffset = getDateWithOffset(currentDate, i);
       const formattedDate = formatDate(dateWithOffset);
-
       const url = `${baseUrl}?wing=${branch.wing}&date=${formattedDate}`;
-      requests.push(fetchBranchData(url, branch, i));
-    }
-  }
+      return fetchBranchData(url, branch, i);
+    });
+  });
 
   const responses = await Promise.all(requests);
 
@@ -76,46 +74,40 @@ async function fetchBranchData(url: string, branch: Branch, offset: number): Pro
     const { data } = await axios.get(url);
     const $ = cheerio.load(data);
 
-    const lectures: Lecture[] = [];
-    $("div.swiper-slide > table > tbody > tr").each((_, row) => {
-      const lecture: Lecture = {
-        class: null,
-        batch: null,
-        branch: branch.keyword,
-        floor: null,
-        lecturer: null,
-        time: null,
-        exam: false,
-        offset,
-      };
+    const lectures: Lecture[] = $("div.swiper-slide > table > tbody > tr")
+      .toArray()
+      .map((row) => {
+        const tds = $(row).find("td").toArray();
+        if (tds.length < 3) return null;
 
-      $(row).find("td").each((tdIndex, td) => {
-        const text = $(td).text().trim();
-        if (tdIndex === 0) {
-          lecture.batch = text.replaceAll("/CO", "");
-        }
-        if (tdIndex === 1) {
-          $(td).find("big").each((_, big) => {
-            const floor = $(td).contents().last().text() + " " + $(big).text();
-            lecture.floor = floor.replaceAll("CO", "");
-          });
-        }
-        if (tdIndex === 2) {
-          lecture.class = $(td).contents().last().text();
-          $(td).find("big").each((i, big) => {
-            if (i === 0) {
-              lecture.time = $(big).text();
-            }
-            if (i === 1) {
-              lecture.lecturer = $(big).text();
-              if (lecture.lecturer === "EXAM") lecture.exam = true;
-            }
-          });
-        }
-      });
+        const batch = $(tds[0]).text().trim().replaceAll("/CO", "");
+        const floor = $(tds[1])
+          .contents()
+          .toArray()
+          .reduce((acc, node) => {
+            const text = $(node).text().trim();
+            return text ? `${acc} ${text}` : acc;
+          }, "")
+          .replaceAll("CO", "");
+        const [time, lecturer] = $(tds[2])
+          .find("big")
+          .toArray()
+          .map((big) => $(big).text().trim());
 
-      lectures.push(lecture);
-    });
+        const lecture: Lecture = {
+          class: $(tds[2]).contents().last().text().trim(),
+          batch,
+          branch: branch.keyword,
+          floor,
+          lecturer,
+          time,
+          exam: lecturer === "EXAM",
+          offset,
+        };
+
+        return lecture;
+      })
+      .filter(Boolean) as Lecture[];
 
     return lectures;
   } catch (error) {
