@@ -51,10 +51,11 @@
 
 	const validateSearchQuery = (lecture: Lecture): boolean => {
 		if (
-			lecture.class?.toLowerCase().startsWith(searchTerm.toLowerCase()) ||
-			lecture.lecturer?.toLowerCase().startsWith(searchTerm.toLowerCase()) ||
-			lecture.batch?.toLowerCase().startsWith(searchTerm.toLowerCase()) ||
-			lecture.branch?.toLowerCase().startsWith(searchTerm.toLowerCase())
+			lecture.class?.trim().toLowerCase().startsWith(searchTerm.toLowerCase()) ||
+			lecture.lecturer?.trim().toLowerCase().startsWith(searchTerm.toLowerCase()) ||
+			lecture.batch?.trim().toLowerCase().startsWith(searchTerm.toLowerCase()) ||
+			lecture.floor?.trim().toLowerCase().startsWith(searchTerm.toLowerCase()) ||
+			lecture.branch?.trim().toLowerCase().startsWith(searchTerm.toLowerCase())
 		) {
 			return true;
 		}
@@ -124,7 +125,7 @@
 			class="bg-muted rounded-lg flex-grow h-10 px-4 text-sm"
 			bind:value={searchTerm}
 			type="text"
-			placeholder="Search (Example - DSE24.2F)"
+			placeholder="Search (Example - DSE24.2F, Harison Hall)"
 		/>
 		<button
 			onclick={() => {
@@ -139,7 +140,7 @@
 	{#if loaded}
 		<div class="fixed bottom-10 p-4 z-20 left-0 w-full flex items-center justify-center">
 			<div
-				class=" flex flex-row items-center justify-center gap-2 w-fit p-4 bg-black/80 rounded-lg"
+				class=" flex flex-row items-center justify-center gap-2 w-fit p-2 bg-black/80 rounded-3xl"
 			>
 				<button
 					class="offset"
@@ -182,12 +183,12 @@
 							<h1 class="text-sm text-muted-foreground">No lectures found for "{searchTerm}".</h1>
 							<img
 								class="max-w-[200px] rounded-lg"
-								src="https://media.tenor.com/ogsh7ailje8aaaam/cat-funny-cat.gif"
+								src="https://media1.tenor.com/m/0EDznml5BDAAAAAC/cat-spinning.gif"
 								alt=""
 							/>
 						{/if}
 					{:else}
-						Server is down :(
+						<span class="text-muted-foreground">No Lectures Today 👍</span>
 					{/if}
 				</div>
 			{/if}
@@ -211,11 +212,6 @@
 			</div>
 		{/if}
 	</div>
-	{#if loaded}
-		<footer>
-			<p class="text-muted-foreground text-xs">{currentDate}</p>
-		</footer>
-	{/if}
 </div>
 
 <style>

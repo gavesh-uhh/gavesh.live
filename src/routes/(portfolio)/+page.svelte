@@ -1,9 +1,6 @@
 <script lang="ts">
 	import { Coffee, SquareArrowOutUpRight } from 'lucide-svelte';
-
-	let responseLoading = $state(false);
-	let initialLoaded = $state(false);
-	let latestResponse = $state('Testing purposes');
+	import { onMount } from 'svelte';
 
 	type GeminiResponse = {
 		original: string;
@@ -13,13 +10,11 @@
 		};
 	};
 
+	// might use for something later idk
 	const getResponse = async (q: string) => {
-		initialLoaded = true;
-		responseLoading = true;
-		const response = await fetch('/api/gemini?q=' + q);
+		const response = await fetch('/api/gemini?d=true&q=' + q);
 		const data: GeminiResponse = await response.json();
-		latestResponse = data.response.emoji + ' ' + data.response.content;
-		responseLoading = false;
+		return data;
 	};
 </script>
 

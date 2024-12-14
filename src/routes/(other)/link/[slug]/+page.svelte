@@ -18,4 +18,8 @@
 		<h1 class="text-2xl font-bold text-center">404 : Cannot find shortend link?</h1>
 		<a href="/" class="underline underline-offset-2">Return To Home</a>
 	</div>
+{:else}
+	<div class="flex-1 h-full items-center flex justify-center flex-col gap-2">
+		<h1 class="text-2xl font-bold text-center">Redirecting..</h1>
+	</div>
 {/if}

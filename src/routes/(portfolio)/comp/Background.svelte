@@ -67,7 +67,7 @@
 			this.y += this.speedY;
 			if (this.x > canvas.width || this.y > canvas.height) {
 				this.x = Math.random() * canvas.width * 0.5;
-				this.y = -50;
+				this.y = -100;
 			}
 		}
 
@@ -126,8 +126,7 @@
 			const radius = Math.random() * 2;
 			const speedX = Math.random() * 2 + 1;
 			const speedY = Math.random() * 0.5 + 0.5;
-			const tailLength = Math.random() * 50 + 50;
-			// 10% chance
+			const tailLength = Math.random() * 50 + 30;
 			if (getChance(0.1)) objects.push(new Comet(canvas, x, y, radius, speedX, speedY, tailLength));
 		}
 
@@ -146,8 +145,7 @@
 </script>
 
 <div
-	class="z-[-10] pointer-events-none overflow-hidden left-0 top-0 opacity-100 blur-xs h-screen fixed w-full"
+	class="z-[-10] pointer-events-none overflow-hidden left-0 top-0 opacity-75 blur-xs h-screen fixed w-full"
 >
 	<canvas bind:this={canvas}></canvas>
 </div>
-

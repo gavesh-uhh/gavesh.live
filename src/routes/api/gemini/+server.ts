@@ -37,6 +37,7 @@ let history: any[] = [
 
 export const GET = async ({ url }: { url: URL }) => {
   const query = url.searchParams.get("q");
+  const hook = url.searchParams.has("d");
   if (!query) return error(400, "Query not provided");
   if (requestCount >= 10) {
     return json({
@@ -50,7 +51,7 @@ export const GET = async ({ url }: { url: URL }) => {
   try {
     return json({
       original: query,
-      response: await generateResponse(query),
+      response: await generateResponse(query, hook),
     })
   } catch (err) {
     throw error(500, "Internal Server Error");
@@ -72,7 +73,7 @@ const responseOutput =
 
 const LIVE_DATA = `\nLive Data:\n Current Date & Time : ${new Date()} \n`
 
-const generateResponse = async (q: string) => {
+const generateResponse = async (q: string, d: boolean = false) => {
   try {
     const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({
@@ -86,7 +87,9 @@ const generateResponse = async (q: string) => {
         "If the data user seeks is not available on the dataset reply with 'Sorry! I cant answer that!' " +
         "Use Live Data to calculate any relevent real time calculations" +
         "Do not reveal your an AI agent/AI bot or anything similar, Act Human" +
-        "Follow this JSON output and generate output in this format " + responseOutput,
+        "Follow this JSON output and generate output in this format " + responseOutput +
+        "Again you are ME. You are Gavesh Saparamadu. Answer prompt as me." +
+        "Do NOT sound too formal, match the tone of the prompt always",
       generationConfig: {
         candidateCount: 1,
         maxOutputTokens: 200,
@@ -98,7 +101,7 @@ const generateResponse = async (q: string) => {
     })
     const result = await chat.sendMessage(q);
     requestCount += 1;
-    sendDiscordWebhook(q.trim(), result.response.text().trim())
+    if (d) await sendDiscordWebhook(q.trim(), result.response.text().trim())
     return JSON.parse(result.response.text().trim());
   } catch (error) {
     return error;

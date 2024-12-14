@@ -8,15 +8,14 @@
 	<a href="/" class="icon" aria-current={currRoute === '/' ? 'page' : null}>
 		<Home class="w-4 h-4" />
 	</a>
-	<a href="/skills" aria-current={currRoute === '/skills' ? 'page' : null}>
-		<BookOpen class="w-4 h-4" />
-		Skills</a
-	>
 	<a href="/projects" aria-current={currRoute === '/projects' ? 'page' : null}>
 		<SquareGanttChart class="w-4 h-4" />
 		Projects</a
 	>
-
+	<a href="/skills" aria-current={currRoute === '/skills' ? 'page' : null}>
+		<BookOpen class="w-4 h-4" />
+		Skills</a
+	>
 	<a href="/links" aria-current={currRoute === '/links' ? 'page' : null}>
 		<Link class="w-4 h-4" />
 		Links</a

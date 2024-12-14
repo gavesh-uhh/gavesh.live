@@ -85,10 +85,11 @@ async function fetchBranchData(url: string, branch: Branch, offset: number): Pro
           .contents()
           .toArray()
           .reduce((acc, node) => {
-            const text = $(node).text().trim();
+            const text = $(node).text().trim().replaceAll("/", "");
             return text ? `${acc} ${text}` : acc;
           }, "")
           .replaceAll("CO", "");
+
         const [time, lecturer] = $(tds[2])
           .find("big")
           .toArray()
