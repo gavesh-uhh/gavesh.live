@@ -27,7 +27,6 @@ export const GET = async () => {
       image: lastTrack.image[2]["#text"],
     };
 
-
     return json(
       {
         online: isOnline,
@@ -50,7 +49,8 @@ export const GET = async () => {
 };
 
 const trimTrack = (fullStr: string) => {
-  return fullStr.replace(/\s*\(.*?\)\s*/g, " ").trim();
+  const cleanedString = fullStr.replace(/\s*\(.*?\)\s*/g, " ").trim();
+  return cleanedString.length > 12 ? cleanedString.split("-")[0] : cleanedString;
 };
 
 const trimArtist = (fullStr: string) => {
