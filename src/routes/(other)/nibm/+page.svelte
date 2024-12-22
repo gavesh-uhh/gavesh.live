@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Loader2, Trash } from 'lucide-svelte';
+	import { Loader2, Trash, Share } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import LectureTab from './comps/LectureTab.svelte';
 	let lectures: Lecture[] = $state([]);
@@ -84,7 +84,7 @@
 <div class="h-full flex-1 flex gap-4 flex-col">
 	<div>
 		<h1 class="text-3xl font-bold"><span class="italic text-blue-500 mr-2">NIBM</span> Lectures</h1>
-		<p class="text-muted-foreground text-xs opacity-50">
+		<p class="text-muted-foreground text-xs opacity-50 mt-1">
 			Disclaimer: Optional and Tutorial classes are not recorded here, Blame the management.
 		</p>
 	</div>
@@ -110,14 +110,6 @@
 			}}
 			aria-current={searchTerm === 'EXAM' ? 'true' : null}>Exams</button
 		>
-
-		<button
-			class="tag"
-			onclick={() => {
-				searchTerm = 'REPEATERS';
-			}}
-			aria-current={searchTerm === 'REPEATERS' ? 'true' : null}>Repeating Exams</button
-		>
 	</div>
 
 	<div class="flex flex-row gap-2 items-center flex-nowrap">
@@ -135,6 +127,16 @@
 		>
 			<Trash class="w-4 h-4 opacity-50 text-white" />
 		</button>
+	</div>
+	<div class="w-full flex justify-end">
+		<a
+			class="bg-green-500 text-xs text-black py-2 px-3 rounded-3xl flex gap-2 items-center"
+			href="https://api.whatsapp.com/send?text=Easily%20view%2C%20search%20and%20save%20lectures%20on%20the%20go%0Ahttps%3A%2F%2Fwww.gavesh.live%2Fnibm%0ASupports%20SOC%2C%20SOB%20and%20NIC"
+			target="_blank"
+		>
+			<Share class="w-4 h-4" />
+			Share on WhatsApp
+		</a>
 	</div>
 
 	{#if loaded}

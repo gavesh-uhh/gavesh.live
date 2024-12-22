@@ -11,6 +11,7 @@ declare global {
     time: string | null;
     offset: number;
     exam: boolean;
+    on_going?: boolean | null;
   };
 
   namespace App {

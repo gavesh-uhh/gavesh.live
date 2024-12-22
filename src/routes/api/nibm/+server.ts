@@ -42,7 +42,6 @@ export const GET = async ({ url }: { url: URL }) => {
   }
 
   const lectures = await getData(currentUTCDate, "https://lms.nibmworldwide.com/mod/nibm/display.php", limit);
-
   return json({ data: lectures });
 };
 
@@ -54,7 +53,7 @@ async function getData(currentDate: string, baseUrl: string, limit: number) {
       const dateWithOffset = getDateWithOffset(currentDate, i);
       const formattedDate = formatDate(dateWithOffset);
       const url = `${baseUrl}?wing=${branch.wing}&date=${formattedDate}`;
-      return fetchBranchData(url, branch, i);
+      return fetchBranchData(url, branch, i, new Date(dateWithOffset));
     });
   });
 
@@ -69,7 +68,7 @@ async function getData(currentDate: string, baseUrl: string, limit: number) {
   return lectures;
 }
 
-async function fetchBranchData(url: string, branch: Branch, offset: number): Promise<Lecture[] | null> {
+async function fetchBranchData(url: string, branch: Branch, offset: number, utcDate: Date): Promise<Lecture[] | null> {
   try {
     const { data } = await axios.get(url);
     const $ = cheerio.load(data);
@@ -104,6 +103,7 @@ async function fetchBranchData(url: string, branch: Branch, offset: number): Pro
           time,
           exam: lecturer === "EXAM",
           offset,
+          on_going: checkIfLive(time, utcDate),
         };
 
         return lecture;
@@ -126,4 +126,26 @@ function getDateWithOffset(currentDate: string, offset: number): Date {
   date.setUTCDate(date.getUTCDate() + offset);
   return date;
 }
+
+// i know this is a incredibly stupid way to do this but this works dont blame me lol
+function checkIfLive(time: string, utcDate: Date): boolean {
+  return isNumberInRange(10, getStartingHour(time), getEndingHour(time));
+}
+
+function isNumberInRange(num: number, min: number, max: number) {
+  return num >= min && num <= max;
+}
+
+function getStartingHour(timeStr: string) {
+  const splitted = timeStr.split("-")[0].trim().replace(/\s?(am|pm)/i, "");
+  const cleaned = splitted.trim().split(":")[0].trim();
+  return parseInt(cleaned);
+}
+
+function getEndingHour(timeStr: string) {
+  const splitted = timeStr.split("-")[1].trim().replace(/\s?(am|pm)/i, "");
+  const cleaned = splitted.trim().split(":")[0].trim();
+  return parseInt(cleaned);
+}
+
 
