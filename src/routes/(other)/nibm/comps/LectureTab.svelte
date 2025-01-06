@@ -30,7 +30,7 @@
 				<span class="text-green-500">{lecture.branch} | </span>
 			{/if}
 			{lecture.batch}
-			{#if lecture.on_going}
+			{#if lecture.on_going && lecture.offset == 0}
 				<span class="text-green-600">(Ongoing)</span>
 			{/if}
 		</h1>
