@@ -25,6 +25,7 @@
 
 	const sortLectureExams = (lectures: Lecture[]) => {
 		lectures.forEach((lecture) => {
+			if (lecture.branch !== 'SOC') return;
 			if (lecture.offset !== 0) return;
 			if (lecture.exam) {
 				examCount += 1;
@@ -34,31 +35,38 @@
 		});
 	};
 
+	const toReadableTime = (fractionalHour: number): string => {
+		const hours = Math.floor(fractionalHour);
+		const minutes = Math.round((fractionalHour - hours) * 60);
+		return `${hours}:${minutes.toString().padStart(2, '0')}`;
+	};
+
 	const predictCafetariaStatus = (lectures: Lecture[]) => {
 		if (currentDate == null) return;
-		const currentHour = currentDate.getHours();
+
+		const currentHour = currentDate.getHours() + currentDate.getMinutes() / 60;
 		let busyCount = 0;
 
 		lectures.forEach((lecture) => {
 			if (lecture.time == null) return;
+
 			const [start, end] = lecture.time.split(' - ').map(cleanTime);
 			const restStart = end;
-			const restEnd = end + lecture.offset - 1;
+			const restEnd = end + 0.8;
+
 			if (currentHour >= restStart && currentHour < restEnd) {
 				busyCount++;
 			}
 		});
 
-		if (busyCount > 10) {
-			cafeteriaStatus = 'Overflowing';
-		} else if (busyCount > 5) {
-			cafeteriaStatus = 'Full';
+		if (busyCount > 5) {
+			cafeteriaStatus = 'Very Busy';
 		} else if (busyCount > 3) {
-			cafeteriaStatus = 'Moderate';
+			cafeteriaStatus = 'Busy';
 		} else if (busyCount > 0) {
-			cafeteriaStatus = 'Low';
+			cafeteriaStatus = 'Moderate';
 		} else {
-			cafeteriaStatus = 'Empty';
+			cafeteriaStatus = 'Free';
 		}
 	};
 
@@ -68,6 +76,7 @@
 		let examsInProgress = 0;
 
 		lectures.forEach((lecture) => {
+			if (lecture.branch !== 'SOC') return;
 			if (!lecture.exam || lecture.time == null) return;
 			const [start, end] = lecture.time.split(' - ').map(cleanTime);
 			if (currentHour >= start && currentHour < end) {
@@ -82,7 +91,7 @@
 		} else if (examsInProgress > 0) {
 			libraryStatus = 'Relavitely Free';
 		} else {
-			libraryStatus = 'Quiet';
+			libraryStatus = 'Free';
 		}
 	};
 
@@ -94,6 +103,7 @@
 </script>
 
 <div>
+	<h1 class="mb-2 font-bold text-gray-400">School of Computing</h1>
 	<div class="container">
 		<div class="status-card">
 			<h1 class="status-header">
@@ -130,7 +140,8 @@
 	<div class="mt-4 opacity-25 text-xs">
 		<p>
 			<strong>Disclaimer:</strong> The statuses displayed for the cafeteria and library are predictions
-			based on currently available data. This tool is currently still on development.
+			based on currently available data. This tool is currently still on development and only supports
+			SOC data.
 		</p>
 	</div>
 </div>
@@ -139,7 +150,7 @@
 	.container {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 1rem;
+		gap: 0.6rem;
 		justify-content: start;
 	}
 
@@ -161,7 +172,7 @@
 
 	.status-header {
 		display: flex;
-		gap: 4px;
+		gap: 6px;
 		align-items: center;
 		font-size: 1rem;
 		color: #cccccc;
@@ -174,4 +185,3 @@
 		text-align: center;
 	}
 </style>
-
