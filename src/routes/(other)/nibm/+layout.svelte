@@ -6,7 +6,7 @@
 <div>
 	<div class="pb-4 flex gap-2 items-center">
 		<h1 class="items-center pr-2 font-bold text-blue-500 italic">NIBM</h1>
-		<a href="/nibm" aria-current={pathname === '/nibm' ? 'true' : null}>Home</a>
+		<a href="/nibm" aria-current={pathname === '/nibm' ? 'true' : null}>Stats</a>
 		<a href="/nibm/lectures" aria-current={pathname === '/nibm/lectures' ? 'true' : null}
 			>Lectures</a
 		>
@@ -26,7 +26,6 @@
 	<meta name="revisit-after" content="4 days" />
 	<meta name="author" content="Gavesh Saparamadu" />
 </svelte:head>
-
 
 <style>
 	a {
