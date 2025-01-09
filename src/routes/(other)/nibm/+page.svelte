@@ -1,244 +1,177 @@
 <script lang="ts">
-	import { Loader2, Trash, Share } from 'lucide-svelte';
 	import { onMount } from 'svelte';
-	import LectureTab from './comps/LectureTab.svelte';
-	let lectures: Lecture[] = $state([]);
-	let currentDate: Date | undefined = $state();
-	let currentBranch: string = $state('SOC');
-	let loaded = $state(false);
-	let searchTerm = $state('');
-	let offset = $state(0);
+	import { ForkKnife, Book, Presentation, Pen } from 'lucide-svelte';
 
-	const toggleBranch = () => {
-		const branches = ['SOC', 'NIC', 'SOB', 'all'];
-		const currentIndex = branches.indexOf(currentBranch);
-		const nextIndex = (currentIndex + 1) % branches.length;
-		currentBranch = branches[nextIndex];
-	};
+	let loaded = false;
+	let currentDate: Date | null = null;
+	let lectures: Lecture[] = [];
+	let cafeteriaStatus: string = 'Loading';
+	let libraryStatus: string = 'Loading';
+	let lectureCount: number = 0;
+	let examCount: number = 0;
 
 	onMount(async () => {
-		const urlParams = new URLSearchParams(window.location.search);
-		currentBranch = urlParams.get('branch') ?? 'SOC';
-		searchTerm = urlParams.get('q') ?? '';
 		currentDate = new Date();
-		const response = await fetch('/api/nibm?limit=5&date=' + currentDate);
+		const response = await fetch('/api/nibm?limit=5&date=' + currentDate.toISOString());
 		const json = await response.json();
-		const data = json.data;
-		data.forEach((element: Lecture) => {
-			lectures = [...lectures, element];
-		});
+		lectures = json.data;
+
+		sortLectureExams(lectures);
+		predictCafetariaStatus(lectures);
+		predictLibraryStatus(lectures);
+
 		loaded = true;
 	});
 
-	const getDay = (offset: number): string => {
-		if (currentDate == undefined) return 'Weirday';
-		const newDate = new Date(currentDate);
-		newDate.setDate(newDate.getDate() + offset);
-		return newDate.toLocaleDateString('en-US', { weekday: 'long' });
+	const sortLectureExams = (lectures: Lecture[]) => {
+		lectures.forEach((lecture) => {
+			if (lecture.offset !== 0) return;
+			if (lecture.exam) {
+				examCount += 1;
+			} else {
+				lectureCount += 1;
+			}
+		});
 	};
 
-	const getRandomQuote = () => {
-		const quotes = [
-			'Why hurry? Your lecturer will start 10 minutes late anyway.',
-			'Fun fact: This page is as reliable as the Wi-Fi in the lecture halls.',
-			'Almost there... or maybe not.',
-			'If this takes too long, blame the admin department.',
-			'Loading... because skipping class isn’t an option. Or is it?',
-			'Still loading... unlike the uni elevators.'
-		];
-		return quotes[Math.floor(Math.random() * quotes.length)];
-	};
+	const predictCafetariaStatus = (lectures: Lecture[]) => {
+		if (currentDate == null) return;
+		const currentHour = currentDate.getHours();
+		let busyCount = 0;
 
-	const validateSearchQuery = (lecture: Lecture): boolean => {
-		if (
-			lecture.class?.trim().toLowerCase().startsWith(searchTerm.toLowerCase()) ||
-			lecture.lecturer?.trim().toLowerCase().startsWith(searchTerm.toLowerCase()) ||
-			lecture.batch?.trim().toLowerCase().startsWith(searchTerm.toLowerCase()) ||
-			lecture.floor?.trim().toLowerCase().startsWith(searchTerm.toLowerCase()) ||
-			lecture.branch?.trim().toLowerCase().startsWith(searchTerm.toLowerCase())
-		) {
-			return true;
+		lectures.forEach((lecture) => {
+			if (lecture.time == null) return;
+			const [start, end] = lecture.time.split(' - ').map(cleanTime);
+			const restStart = end;
+			const restEnd = end + lecture.offset - 1;
+			if (currentHour >= restStart && currentHour < restEnd) {
+				busyCount++;
+			}
+		});
+
+		if (busyCount > 10) {
+			cafeteriaStatus = 'Overflowing';
+		} else if (busyCount > 5) {
+			cafeteriaStatus = 'Full';
+		} else if (busyCount > 3) {
+			cafeteriaStatus = 'Moderate';
+		} else if (busyCount > 0) {
+			cafeteriaStatus = 'Low';
+		} else {
+			cafeteriaStatus = 'Empty';
 		}
-		return false;
 	};
 
-	const getBranchColorClass = () => {
-		if (currentBranch === 'SOC') return 'bg-blue-500';
-		if (currentBranch === 'SOB') return 'bg-green-500';
-		if (currentBranch === 'NIC') return 'bg-yellow-500';
-		return 'bg-muted';
+	const predictLibraryStatus = (lectures: Lecture[]) => {
+		if (currentDate == null) return;
+		const currentHour = currentDate.getHours();
+		let examsInProgress = 0;
+
+		lectures.forEach((lecture) => {
+			if (!lecture.exam || lecture.time == null) return;
+			const [start, end] = lecture.time.split(' - ').map(cleanTime);
+			if (currentHour >= start && currentHour < end) {
+				examsInProgress++;
+			}
+		});
+
+		if (examsInProgress > 5) {
+			libraryStatus = 'Very Busy';
+		} else if (examsInProgress > 2) {
+			libraryStatus = 'Busy';
+		} else if (examsInProgress > 0) {
+			libraryStatus = 'Relavitely Free';
+		} else {
+			libraryStatus = 'Quiet';
+		}
+	};
+
+	const cleanTime = (time: string): number => {
+		const sanitizedTime = time.replace(/am|pm/i, '').trim();
+		const [hour, minute] = sanitizedTime.split(':').map(Number);
+		return hour + minute / 60;
 	};
 </script>
 
-<svelte:head>
-	<title>NIBM Lecture Explorer</title>
-	<meta name="title" content="NIBM Lecturer Explorer" />
-	<meta name="description" content="Sort through today's lectures" />
-	<meta name="keywords" content="nibm" />
-	<meta name="robots" content="index, follow" />
-	<meta name="language" content="English" />
-	<meta name="revisit-after" content="4 days" />
-	<meta name="author" content="Gavesh Saparamadu" />
-</svelte:head>
+<div>
+	<div class="container">
+		<div class="status-card">
+			<h1 class="status-header">
+				<Presentation class="w-4 h-4" />
+				Total Lectures
+			</h1>
+			<h1 class="status-value">{lectureCount}</h1>
+		</div>
 
-<div class="h-full flex-1 flex gap-4 flex-col">
-	<div>
-		<h1 class="text-3xl font-bold"><span class="italic text-blue-500 mr-2">NIBM</span> Lectures</h1>
-		<p class="text-muted-foreground text-xs opacity-50 mt-1">
-			Disclaimer: Optional and Tutorial classes are not recorded here, Blame the management.
+		<div class="status-card">
+			<h1 class="status-header">
+				<Pen class="w-4 h-4" />
+				Exams Today
+			</h1>
+			<h1 class="status-value">{examCount}</h1>
+		</div>
+
+		<div class="status-card">
+			<h1 class="status-header">
+				<ForkKnife class="w-4 h-4" />
+				Cafeteria Status
+			</h1>
+			<h1 class="status-value">{cafeteriaStatus}</h1>
+		</div>
+
+		<div class="status-card">
+			<h1 class="status-header">
+				<Book class="w-4 h-4" />
+				Library Status
+			</h1>
+			<h1 class="status-value">{libraryStatus}</h1>
+		</div>
+	</div>
+	<div class="mt-4 opacity-25 text-xs">
+		<p>
+			<strong>Disclaimer:</strong> The statuses displayed for the cafeteria and library are predictions
+			based on currently available data. This tool is currently still on development.
 		</p>
-	</div>
-	<div class="flex-1 flex flex-wrap gap-2">
-		<div class="flex-shrink-0">
-			<button class="px-2 branch-select {getBranchColorClass()}" onclick={toggleBranch}>
-				Branch : {currentBranch.toUpperCase()}
-			</button>
-		</div>
-
-		<button
-			class="tag"
-			onclick={() => {
-				searchTerm = 'DSE24.2F';
-			}}
-			aria-current={searchTerm === 'DSE24.2F' ? 'true' : null}>DSE24.2F</button
-		>
-
-		<button
-			class="tag"
-			onclick={() => {
-				searchTerm = 'EXAM';
-			}}
-			aria-current={searchTerm === 'EXAM' ? 'true' : null}>Exams</button
-		>
-	</div>
-
-	<div class="flex flex-row gap-2 items-center flex-nowrap">
-		<input
-			class="bg-muted rounded-lg flex-grow h-10 px-4 text-sm"
-			bind:value={searchTerm}
-			type="text"
-			placeholder="Search (Example - DSE24.2F, Harison Hall)"
-		/>
-		<button
-			onclick={() => {
-				searchTerm = '';
-			}}
-			class="p-2 rounded-lg bg-destructive flex-shrink-0 flex items-center justify-center h-10 w-10"
-		>
-			<Trash class="w-4 h-4 opacity-50 text-white" />
-		</button>
-	</div>
-	<div class="w-full flex justify-end">
-		<a
-			class="bg-green-500 text-xs text-black py-2 px-3 rounded-3xl flex gap-2 items-center"
-			href="https://api.whatsapp.com/send?text=Easily%20view%2C%20search%20and%20save%20lectures%20on%20the%20go%0Ahttps%3A%2F%2Fwww.gavesh.live%2Fnibm%0ASupports%20SOC%2C%20SOB%20and%20NIC"
-			target="_blank"
-		>
-			<Share class="w-4 h-4" />
-			Share on WhatsApp
-		</a>
-	</div>
-
-	{#if loaded}
-		<div class="fixed bottom-10 p-4 z-20 left-0 w-full flex items-center justify-center">
-			<div
-				class=" flex flex-row items-center justify-center gap-2 w-fit p-2 bg-black/80 rounded-3xl"
-			>
-				<button
-					class="offset"
-					aria-current={offset == 0 ? 'true' : null}
-					onclick={() => {
-						offset = 0;
-					}}>Today</button
-				>
-				<button
-					class="offset"
-					aria-current={offset == 1 ? 'true' : null}
-					onclick={() => {
-						offset = 1;
-					}}>Tomorrow</button
-				>
-
-				<button
-					class="offset"
-					aria-current={offset == 2 ? 'true' : null}
-					onclick={() => {
-						offset = 2;
-					}}>Next {getDay(2)}</button
-				>
-			</div>
-		</div>
-	{/if}
-	<div class="flex flex-col gap-2">
-		{#if loaded}
-			{#if lectures.filter((lecture) => validateSearchQuery(lecture) && lecture.offset === offset).length === 0}
-				<div class="flex-1 my-10 h-full justify-center gap-4 items-center flex flex-col">
-					{#if searchTerm !== ''}
-						{#if searchTerm === '3wheel' || searchTerm === 'threewheel'}
-							<img
-								class="max-w-[200px] rounded-lg"
-								src="https://utfs.io/f/TIFafgpE6s0cjQTCkW5AtlqTDP2LFM9ihae3cYfmysz06bxO"
-								alt=""
-							/>
-							<h1>Certified Orugodawatta Moment</h1>
-						{:else}
-							<h1 class="text-sm text-muted-foreground">No lectures found for "{searchTerm}".</h1>
-							<img
-								class="max-w-[200px] rounded-lg"
-								src="https://media1.tenor.com/m/0EDznml5BDAAAAAC/cat-spinning.gif"
-								alt=""
-							/>
-						{/if}
-					{:else}
-						<span class="text-muted-foreground">No Lectures Today 👍</span>
-					{/if}
-				</div>
-			{/if}
-			{#each lectures as lecture}
-				{#if lecture.branch === currentBranch || currentBranch === 'all'}
-					{#if validateSearchQuery(lecture)}
-						{#if lecture.offset === offset}
-							<LectureTab {lecture} />
-						{/if}
-					{:else if searchTerm === ''}
-						{#if lecture.offset === offset}
-							<LectureTab {lecture} />
-						{/if}
-					{/if}
-				{/if}
-			{/each}
-		{:else}
-			<div class="mt-10 flex-1 h-full justify-center gap-4 items-center flex flex-col">
-				<Loader2 class="animate-spin" />
-				<h1 class="text-xs text-muted-foreground">{getRandomQuote()}</h1>
-			</div>
-		{/if}
 	</div>
 </div>
 
 <style>
-	.branch-select {
-		@apply px-5 py-2 rounded-xl text-xs sm:text-base;
-		transition: all 150ms ease-out;
+	.container {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+		justify-content: start;
 	}
 
-	.offset[aria-current='true'] {
-		@apply bg-blue-900;
+	.status-card {
+		flex: 1 1 200px;
+		min-width: 250px;
+		max-width: 400px;
+		background: linear-gradient(135deg, #2e2e2e9f, #121212);
+		color: #f9f9f9;
+		border: 1px solid #333;
+		border-radius: 0.75rem;
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: start;
+		padding: 1rem;
 	}
 
-	.offset {
-		@apply px-4 py-2 rounded-3xl text-xs sm:text-base;
-		@apply bg-muted;
-		transition: all 150ms ease-out;
+	.status-header {
+		display: flex;
+		gap: 4px;
+		align-items: center;
+		font-size: 1rem;
+		color: #cccccc;
 	}
 
-	.tag {
-		@apply px-4 py-2 rounded-3xl text-xs sm:text-base;
-		@apply bg-muted;
-		transition: all 150ms ease-out;
-	}
-
-	.tag[aria-current='true'] {
-		@apply bg-yellow-500 text-black;
+	.status-value {
+		font-size: 2rem;
+		font-weight: 700;
+		color: #ffffff;
+		text-align: center;
 	}
 </style>
+

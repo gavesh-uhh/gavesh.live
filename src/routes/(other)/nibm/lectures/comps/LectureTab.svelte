@@ -17,9 +17,6 @@
 	{#if lecture.exam}
 		<div class="exam-grad"></div>
 	{/if}
-	{#if lecture.on_going && lecture.offset == 0}
-		<div class="live-grad"></div>
-	{/if}
 	<div class="flex items-center w-full justify-between z-20">
 		<h1 class="text-muted-foreground text-[10px] sm:text-xs md:text-sm text-right">
 			{#if lecture.branch === 'SOC'}
@@ -30,9 +27,6 @@
 				<span class="text-green-500">{lecture.branch} | </span>
 			{/if}
 			{lecture.batch}
-			{#if lecture.on_going && lecture.offset == 0}
-				<span class="text-green-600">(Ongoing)</span>
-			{/if}
 		</h1>
 	</div>
 	<div class="flex items-center gap-1 w-full justify-between z-20">

@@ -1,12 +1,14 @@
 import { json } from "@sveltejs/kit";
 import axios from "axios";
 import * as cheerio from "cheerio";
+
 type Branch = {
   wing: string;
   keyword: string;
   title: string;
   location: string;
 };
+
 const branches: Branch[] = [
   {
     wing: "CO",
@@ -27,6 +29,7 @@ const branches: Branch[] = [
     location: "Rajagiriya",
   },
 ];
+
 export const GET = async ({ url }: { url: URL }) => {
   const currentUTCDate = url.searchParams.get("date");
   const limit = parseInt(url.searchParams.get("limit") || "3", 10);
@@ -43,6 +46,7 @@ export const GET = async ({ url }: { url: URL }) => {
   );
   return json({ data: lectures, reference: branches });
 };
+
 async function getData(currentDate: string, baseUrl: string, limit: number) {
   const lectures: Lecture[] = [];
   const requests = branches.flatMap((branch) => {
@@ -61,6 +65,7 @@ async function getData(currentDate: string, baseUrl: string, limit: number) {
   });
   return lectures;
 }
+
 async function fetchBranchData(
   url: string,
   branch: Branch,
@@ -112,27 +117,33 @@ async function fetchBranchData(
     return null;
   }
 }
+
 function formatDate(date: Date): string {
   return `${date.getUTCFullYear()}-${date.getUTCMonth() + 1
     }-${date.getUTCDate()}`;
 }
+
 function getDateWithOffset(currentDate: string, offset: number): Date {
   const date = new Date(currentDate);
   date.setUTCDate(date.getUTCDate() + offset);
   return date;
 }
+
 // i know this is a incredibly stupid way to do this but this works dont blame me lol
 function checkIfLive(time: string, utcDate: Date): boolean {
   return isNumberInRange(10, getStartingHour(time), getEndingHour(time));
 }
+
 function isNumberInRange(num: number, min: number, max: number) {
   return num >= min && num <= max;
 }
+
 function getStartingHour(timeStr: string) {
   const splitted = timeStr.split("-")[0].trim().replace(/\s?(am|pm)/i, "");
   const cleaned = splitted.trim().split(":")[0].trim();
   return parseInt(cleaned);
 }
+
 function getEndingHour(timeStr: string) {
   const splitted = timeStr.split("-")[1].trim().replace(/\s?(am|pm)/i, "");
   const cleaned = splitted.trim().split(":")[0].trim();
