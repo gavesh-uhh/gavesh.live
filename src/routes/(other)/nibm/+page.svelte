@@ -48,7 +48,7 @@
 		let busyCount = 0;
 
 		lectures.forEach((lecture) => {
-			if (lecture.time == null) return;
+			if (lecture.time == null || lecture.offset != 0) return;
 
 			const [start, end] = lecture.time.split(' - ').map(cleanTime);
 			const restStart = end;
@@ -78,6 +78,7 @@
 		lectures.forEach((lecture) => {
 			if (lecture.branch !== 'SOC') return;
 			if (!lecture.exam || lecture.time == null) return;
+			if (lecture.offset != 0) return;
 			const [start, end] = lecture.time.split(' - ').map(cleanTime);
 			if (currentHour >= start && currentHour < end) {
 				examsInProgress++;
@@ -102,13 +103,13 @@
 	};
 </script>
 
-<div>
+<div class="w-100">
 	<h1 class="mb-2 font-bold text-gray-400">School of Computing</h1>
 	<div class="container">
 		<div class="status-card">
 			<h1 class="status-header">
 				<Presentation class="w-4 h-4" />
-				Total Lectures
+				Total Lectures Today
 			</h1>
 			<h1 class="status-value">{lectureCount}</h1>
 		</div>
@@ -147,18 +148,25 @@
 </div>
 
 <style>
+	@property --nibm-status-card-grad {
+		syntax: '<color>';
+		initial-value: #2e2e2e9f;
+		inherits: false;
+	}
+
 	.container {
+		width: 100%;
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.6rem;
+		gap: 0.5rem;
 		justify-content: start;
+		padding-right: 0;
 	}
 
 	.status-card {
-		flex: 1 1 200px;
+		flex: 1 1 250px;
 		min-width: 250px;
-		max-width: 400px;
-		background: linear-gradient(135deg, #2e2e2e9f, #121212);
+		background: linear-gradient(135deg, var(--nibm-status-card-grad), #121212);
 		color: #f9f9f9;
 		border: 1px solid #333;
 		border-radius: 0.75rem;
@@ -167,7 +175,14 @@
 		flex-direction: column;
 		justify-content: center;
 		align-items: start;
-		padding: 1rem;
+		padding: 1.2rem;
+		box-sizing: border-box;
+		cursor: pointer;
+		transition: --nibm-status-card-grad 500ms;
+	}
+
+	.status-card:hover {
+		--nibm-status-card-grad: #2e2e2eff;
 	}
 
 	.status-header {

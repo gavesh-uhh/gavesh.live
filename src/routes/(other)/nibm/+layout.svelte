@@ -4,14 +4,14 @@
 </script>
 
 <div>
-	<div class="pb-4 flex gap-2 items-center">
-		<h1 class="items-center pr-2 font-bold text-blue-500 italic">NIBM</h1>
+	<div class="pb-1 pt-1 flex gap-2 items-center mb-3">
+		<a href="/nibm/help" class="icon" aria-current={pathname === '/nibm/help' ? 'true' : null}>?</a>
 		<a href="/nibm" aria-current={pathname === '/nibm' ? 'true' : null}>Stats</a>
 		<a href="/nibm/lectures" aria-current={pathname === '/nibm/lectures' ? 'true' : null}
 			>Lectures</a
 		>
 	</div>
-	<div>
+	<div class="">
 		{@render children()}
 	</div>
 </div>
@@ -28,15 +28,38 @@
 </svelte:head>
 
 <style>
+	@property --nibm-navbar-grad {
+		syntax: '<color>';
+		initial-value: #2e2e2e9f;
+		inherits: false;
+	}
+
+	a.icon {
+		@apply px-4 py-2 rounded-3xl;
+	}
+
 	a {
+		background: linear-gradient(135deg, var(--nibm-navbar-grad), #121212);
+		color: #f9f9f9;
+		border: 1px solid #333;
+		border-radius: 0.75rem;
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 		transition: all 150ms linear;
-		@apply bg-white text-black rounded-3xl px-6 py-2;
+		@apply px-6 py-2 rounded-3xl;
 		opacity: 60%;
 	}
 
 	a[aria-current='true'] {
 		@apply font-bold;
 		@apply px-8;
+		--nibm-navbar-grad: #2e2e2eff;
+		opacity: 100%;
+	}
+
+	a.icon[aria-current='true'] {
+		@apply font-bold;
+		@apply px-4 py-2 rounded-3xl;
+		--nibm-navbar-grad: #2e2e2eff;
 		opacity: 100%;
 	}
 </style>

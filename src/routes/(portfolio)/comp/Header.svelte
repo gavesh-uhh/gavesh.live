@@ -66,7 +66,7 @@
 	}
 </script>
 
-<div class="flex flex-col sm:flex-row gap-10 sm:gap-14">
+<div class="flex flex-col sm:flex-row gap-12 sm:gap-16">
 	<div class="flex flex-row gap-4 items-end">
 		<div>
 			<img class="max-w-[120px] max-h-[120px] rounded-lg" src={GITHUB_PROFILE_URL} alt="" />
@@ -95,7 +95,7 @@
 							{SPOTIFY_TRACK}
 						</div>
 						<div>
-							<a href={`https://open.spotify.com/search/${SPOTIFY_TRACK} by ${SPOTIFY_ARTIST}`}>
+							<a href={`https://open.spotify.com/search/${SPOTIFY_TRACK}`}>
 								<SquareArrowOutUpRight class="w-4 h-4" />
 							</a>
 						</div>

@@ -63,10 +63,10 @@
 	};
 
 	const getBranchColorClass = () => {
-		if (currentBranch === 'SOC') return 'bg-blue-500';
-		if (currentBranch === 'SOB') return 'bg-green-500';
-		if (currentBranch === 'NIC') return 'bg-yellow-500';
-		return 'bg-muted';
+		if (currentBranch === 'SOC') return 'soc';
+		if (currentBranch === 'SOB') return 'sob';
+		if (currentBranch === 'NIC') return 'nic';
+		return '';
 	};
 </script>
 
@@ -82,6 +82,23 @@
 </svelte:head>
 
 <div class="h-full flex-1 flex gap-4 flex-col">
+	<div class="flex flex-row gap-2 items-center flex-nowrap">
+		<input
+			class="bg-muted rounded-lg flex-grow h-10 px-4 text-sm"
+			bind:value={searchTerm}
+			type="text"
+			placeholder="Search (Example - DSE24.2F, Harison Hall)"
+		/>
+		<button
+			onclick={() => {
+				searchTerm = '';
+			}}
+			class="p-2 rounded-lg bg-destructive flex-shrink-0 flex items-center justify-center h-10 w-10"
+		>
+			<Trash class="w-4 h-4 opacity-50 text-white" />
+		</button>
+	</div>
+
 	<div class="flex-1 flex flex-wrap gap-2">
 		<div class="flex-shrink-0">
 			<button class="px-2 branch-select {getBranchColorClass()}" onclick={toggleBranch}>
@@ -104,23 +121,6 @@
 			}}
 			aria-current={searchTerm === 'EXAM' ? 'true' : null}>Exams</button
 		>
-	</div>
-
-	<div class="flex flex-row gap-2 items-center flex-nowrap">
-		<input
-			class="bg-muted rounded-lg flex-grow h-10 px-4 text-sm"
-			bind:value={searchTerm}
-			type="text"
-			placeholder="Search (Example - DSE24.2F, Harison Hall)"
-		/>
-		<button
-			onclick={() => {
-				searchTerm = '';
-			}}
-			class="p-2 rounded-lg bg-destructive flex-shrink-0 flex items-center justify-center h-10 w-10"
-		>
-			<Trash class="w-4 h-4 opacity-50 text-white" />
-		</button>
 	</div>
 
 	{#if loaded}
@@ -164,14 +164,9 @@
 								src="https://utfs.io/f/TIFafgpE6s0cjQTCkW5AtlqTDP2LFM9ihae3cYfmysz06bxO"
 								alt=""
 							/>
-							<h1>Certified Orugodawatta Moment</h1>
+							<h1>Acheivement Unlocked: Orugodawatte Moment</h1>
 						{:else}
 							<h1 class="text-sm text-muted-foreground">No lectures found for "{searchTerm}".</h1>
-							<img
-								class="max-w-[200px] rounded-lg"
-								src="https://media1.tenor.com/m/0EDznml5BDAAAAAC/cat-spinning.gif"
-								alt=""
-							/>
 						{/if}
 					{:else}
 						<span class="text-muted-foreground">No Lectures Today 👍</span>
@@ -201,9 +196,32 @@
 </div>
 
 <style>
+	@property --lecture-grad {
+		syntax: '<color>';
+		initial-value: #2e2e2e9f;
+		inherits: false;
+	}
+
 	.branch-select {
+		background: linear-gradient(135deg, var(--lecture-grad), #121212);
+		color: #f9f9f9;
+		border: 1px solid #333;
+		border-radius: 0.75rem;
+		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 		@apply px-5 py-2 rounded-xl text-xs sm:text-base;
-		transition: all 150ms ease-out;
+		transition: --lecture-grad 350ms ease-out;
+	}
+
+	.branch-select.sob {
+		--lecture-grad: #00ff509f;
+	}
+
+	.branch-select.nic {
+		--lecture-grad: #ffff009f;
+	}
+
+	.branch-select.soc {
+		--lecture-grad: #0e98baff;
 	}
 
 	.offset[aria-current='true'] {
