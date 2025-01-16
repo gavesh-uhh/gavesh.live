@@ -1,6 +1,13 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+
 	let { children, data } = $props();
 	let pathname = $derived(data.pathname);
+
+	// commit: hehe
+	if (Math.random() < 0.01) {
+		goto('https://www.youtube.com/watch?v=rdlrtFOACz8');
+	}
 </script>
 
 <div>
