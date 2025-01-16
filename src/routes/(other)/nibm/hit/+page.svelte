@@ -62,14 +62,13 @@
 		);
 		const data = await response.json();
 		if (data == null) return person;
-		console.log(data);
 		person.active = data.active;
 		person.id = data.id;
 		person.name = data.firstName.trim() + ' ' + data.lastName.trim();
-		person.mobile_phone = data.mobilePhone;
+		person.mobile_phone = data.mobileNo;
 		person.land_phone = data.landLine;
 		person.prefix = data.title?.name;
-		person.address = `${data.no ?? ''}, ${data.street ?? ''}, ${data.city ?? ''}`.trim();
+		person.address = `${data.no ?? ''} ${data.street ?? ''} ${data.city ?? ''}`.trim();
 		if (person.address.trim() === '') {
 			person.address = 'No address provided';
 		}
