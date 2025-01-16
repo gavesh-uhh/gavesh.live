@@ -101,8 +101,11 @@
 			{:else}
 				<h2 class="font-bold text-xl mb-2">{personData.prefix ?? ''} {personData.name}</h2>
 				<p class="text-gray-300">ID: {personData.id}</p>
+				{#if personData.mobile_phone}
+					<p class="text-gray-300">Mobile Phone: {personData.mobile_phone}</p>
+				{/if}
 				{#if personData.land_phone}
-					<p class="text-gray-300">Phone: {personData.land_phone}</p>
+					<p class="text-gray-300">Land Phone: {personData.land_phone}</p>
 				{/if}
 				{#if personData.address}
 					<p class="text-gray-300">Address: {personData.address}</p>
