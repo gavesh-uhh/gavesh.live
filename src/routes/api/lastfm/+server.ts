@@ -50,7 +50,7 @@ export const GET = async () => {
 
 const trimTrack = (fullStr: string) => {
   const cleanedString = fullStr.replace(/\s*\(.*?\)\s*/g, " ").trim();
-  return cleanedString.length > 12 ? cleanedString.split("-")[0] : cleanedString;
+  return cleanedString.length > 25 ? cleanedString.split("-")[0] : cleanedString;
 };
 
 const trimArtist = (fullStr: string) => {
