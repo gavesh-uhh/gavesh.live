@@ -4,12 +4,15 @@
 	let loading = false;
 	let personData: PersonResponse | null = null;
 
+	let count = 0;
+
 	type PersonResponse = {
 		active: boolean;
 		id: number;
 		prefix?: string;
 		name: string;
-		phone?: string;
+		mobile_phone?: string;
+		land_phone?: string;
 		address?: string;
 		nic?: string;
 	};
@@ -38,7 +41,8 @@
 			loading = false;
 			return;
 		}
-		if (blackListed.includes(query)) {
+		const normalizedQuery = query.trim().toLowerCase();
+		if (blackListed.some((email) => email.toLowerCase() === normalizedQuery)) {
 			alert('This person is protected by the 2nd Amendment');
 			loading = false;
 			return;
@@ -62,12 +66,14 @@
 		person.active = data.active;
 		person.id = data.id;
 		person.name = data.firstName.trim() + ' ' + data.lastName.trim();
-		person.phone = data.mobilePhone;
+		person.mobile_phone = data.mobilePhone;
+		person.land_phone = data.landLine;
 		person.prefix = data.title?.name;
-		person.address = `${data.no ?? ''} ${data.street ?? ''} ${data.city ?? ''}`.trim();
+		person.address = `${data.no ?? ''}, ${data.street ?? ''}, ${data.city ?? ''}`.trim();
 		if (person.address.trim() === '') {
 			person.address = 'No address provided';
 		}
+		count++;
 		return person;
 	}
 </script>
@@ -95,13 +101,15 @@
 			{:else}
 				<h2 class="font-bold text-xl mb-2">{personData.prefix ?? ''} {personData.name}</h2>
 				<p class="text-gray-300">ID: {personData.id}</p>
-				{#if personData.phone}
-					<p class="text-gray-300">Phone: {personData.phone}</p>
+				{#if personData.land_phone}
+					<p class="text-gray-300">Phone: {personData.land_phone}</p>
 				{/if}
 				{#if personData.address}
 					<p class="text-gray-300">Address: {personData.address}</p>
 				{/if}
-				<p class="text-gray-300">Status: {personData.active ? 'Active' : 'Inactive'}</p>
+				<p class="text-gray-300">
+					Status: {personData.active ? 'Student' : 'Inactive Email'}
+				</p>
 			{/if}
 		</div>
 	{/if}
@@ -151,4 +159,3 @@
 		margin: 0.25rem 0;
 	}
 </style>
-
