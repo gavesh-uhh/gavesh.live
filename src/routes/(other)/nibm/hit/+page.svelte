@@ -35,7 +35,7 @@
 
 	async function searchPeople() {
 		loading = true;
-		personData = null; // Clear previous data
+		personData = null;
 		const query = inputBind.value.trim();
 		if (query === '' || query == null) {
 			loading = false;
@@ -76,6 +76,17 @@
 		return person;
 	}
 </script>
+
+<svelte:head>
+	<title>NIBM : WTF</title>
+	<meta name="title" content="NIBM Lecturer Explorer" />
+	<meta name="description" content="Sort through today's lectures" />
+	<meta name="keywords" content="nibm" />
+	<meta name="robots" content="index, follow" />
+	<meta name="language" content="English" />
+	<meta name="revisit-after" content="4 days" />
+	<meta name="author" content="Gavesh Saparamadu" />
+</svelte:head>
 
 <div class="flex flex-col items-center w-100">
 	<h1 class="text-bold text-3xl mb-4 flex items-center gap-2">

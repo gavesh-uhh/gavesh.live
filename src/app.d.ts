@@ -2,6 +2,15 @@
 // for information about these interfaces
 declare global {
 
+
+  type NIBM_Paper = {
+    id: string;
+    title: string;
+    thumbnail: string;
+    url: string;
+  };
+
+
   type Lecture = {
     class: string | null;
     batch: string | null;

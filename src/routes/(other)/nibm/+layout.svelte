@@ -11,12 +11,13 @@
 </script>
 
 <div>
-	<div class="pb-1 pt-1 flex gap-2 items-center mb-3">
+	<div class="pb-1 pt-1 flex flex-wrap gap-2 items-center mb-3">
 		<a href="/nibm/help" class="icon" aria-current={pathname === '/nibm/help' ? 'true' : null}>?</a>
 		<a href="/nibm" aria-current={pathname === '/nibm' ? 'true' : null}>Stats</a>
 		<a href="/nibm/lectures" aria-current={pathname === '/nibm/lectures' ? 'true' : null}
 			>Lectures</a
 		>
+		<a href="/nibm/paper" aria-current={pathname === '/nibm/paper' ? 'true' : null}>Papers</a>
 	</div>
 	<div class="">
 		{@render children()}
@@ -24,7 +25,7 @@
 </div>
 
 <svelte:head>
-	<title>NIBM : Stats</title>
+	<title>NIBM : Viewing</title>
 	<meta name="title" content="NIBM Lecturer Explorer" />
 	<meta name="description" content="Sort through today's lectures" />
 	<meta name="keywords" content="nibm" />

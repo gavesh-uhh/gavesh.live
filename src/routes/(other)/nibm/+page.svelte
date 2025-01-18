@@ -103,6 +103,17 @@
 	};
 </script>
 
+<svelte:head>
+	<title>NIBM : Stats</title>
+	<meta name="title" content="NIBM Lecturer Explorer" />
+	<meta name="description" content="Sort through today's lectures" />
+	<meta name="keywords" content="nibm" />
+	<meta name="robots" content="index, follow" />
+	<meta name="language" content="English" />
+	<meta name="revisit-after" content="4 days" />
+	<meta name="author" content="Gavesh Saparamadu" />
+</svelte:head>
+
 <div class="w-100">
 	<h1 class="mb-2 font-bold text-gray-400">School of Computing</h1>
 	<div class="container">
