@@ -10,7 +10,7 @@
 			<ArrowLeft class="w-4 h-4" />
 			Home</a
 		>
-		<h1 class="text-muted-foreground text-xs">❤️ Apps by Gavesh</h1>
+		<h1 class="text-muted-foreground text-xs">❤️ Made by Gavesh</h1>
 	</div>
 	<div>
 		<hr class="opacity-30 p-0 m-0" />

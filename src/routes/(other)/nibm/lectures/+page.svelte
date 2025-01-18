@@ -44,7 +44,8 @@
 			'Almost there... or maybe not.',
 			'If this takes too long, blame the admin department.',
 			'Loading... because skipping class isn’t an option. Or is it?',
-			'Still loading... unlike the uni elevators.'
+			'Still loading... unlike the uni elevators.',
+			'If you can read this, you’re probably not in a lecture.'
 		];
 		return quotes[Math.floor(Math.random() * quotes.length)];
 	};
@@ -160,7 +161,7 @@
 					{#if searchTerm !== ''}
 						{#if searchTerm === '3wheel' || searchTerm === 'threewheel'}
 							<img
-								class="max-w-[200px] rounded-lg"
+								class="max-w-[200px] rounded-lg animate-bounce"
 								src="https://utfs.io/f/TIFafgpE6s0cjQTCkW5AtlqTDP2LFM9ihae3cYfmysz06bxO"
 								alt=""
 							/>

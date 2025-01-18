@@ -4,6 +4,7 @@
 
 	let papers: NIBM_Paper[] = $state([]);
 	let searchBar: HTMLInputElement;
+	let keywordBar: HTMLInputElement;
 
 	const getPapers = async (query: string) => {
 		const response = await fetch(getURL(query));
@@ -26,6 +27,7 @@
 			let paperSet = data.content;
 			for (const x of paperSet) {
 				if (!x.id) continue;
+				console.log(x);
 				papers.push({
 					id: x.id,
 					title: x.batch + ' ' + x.nibmSubject.name,
@@ -39,6 +41,10 @@
 	const downloadAllPapers = async () => {
 		papers.forEach(async (paper) => {
 			try {
+				const keyword = keywordBar.value || '';
+				if (keyword && !paper.title.toLowerCase().includes(keyword.toLowerCase())) {
+					return;
+				}
 				const response = await fetch(paper.url);
 				const blob = await response.blob();
 				const url = window.URL.createObjectURL(blob);
@@ -75,13 +81,14 @@
 		<input
 			type="text"
 			bind:this={searchBar}
-			onchange={mountPapers}
+			oninput={mountPapers}
 			placeholder="Example: DBMS, ECS"
-			class="search-input w-full"
+			class="search-input w-full p-3 placeholder:px-1"
 		/>
 	</div>
-	<div class="flex flex-row justify-end w-full">
-		<button class="px-4 py-2" onclick={downloadAllPapers}>Bulk Download All </button>
+	<div class="flex flex-row justify-end gap-2 w-full">
+		<input bind:this={keywordBar} placeholder="Keyword" class="search-input" type="text" />
+		<button class="px-4 py-2" onclick={downloadAllPapers}>Download All </button>
 	</div>
 	<div class="grid gap-4 w-full">
 		{#each papers as paper}
@@ -92,14 +99,12 @@
 
 <style>
 	.search-input {
-		padding: 0.75rem;
 		border-radius: 8px;
 		background: linear-gradient(135deg, var(--nibm-navbar-grad), #121212);
 		color: #f9f9f9;
 		border: 1px solid #333;
 		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 		font-size: 1rem;
-		width: 100%;
 	}
 
 	.search-input:focus {
