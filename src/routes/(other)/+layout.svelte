@@ -4,7 +4,7 @@
 	let { children } = $props();
 </script>
 
-<div class="p-6 sm:p-8 flex flex-col gap-4">
+<div class="p-6 sm:p-8 flex flex-col gap-4 min-h-screen">
 	<div class="flex flex-row justify-between items-center">
 		<a href="/" class="flex flex-row gap-2 items-center">
 			<ArrowLeft class="w-4 h-4" />
