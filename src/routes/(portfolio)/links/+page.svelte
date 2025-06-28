@@ -30,8 +30,8 @@
 	<h1 class="font-semibold text-muted-foreground">Links</h1>
 	<div class="flex flex-col gap-6 px-4 py-2 border-l-2 border-white/50">
 		{@render link({
-      href: 'https://nibm.gavesh.live',
-			title: 'NIBM Lecturer Explorer',
+      href: 'https://nibm.gavesh.me',
+			title: 'NIBM Tools',
 			description:
 				'Easier way of viewing lectures. Easily sort through and view where lectures are happening.'
 		})}
